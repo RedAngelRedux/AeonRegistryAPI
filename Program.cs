@@ -1,10 +1,9 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddCustomSwagger();
 
 var app = builder.Build();
 
@@ -16,8 +15,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // This allows serving static files like images from wwwroot folder
 
-app.MapGet("/api/Greeting",()=> 
+app.MapGet("/api/Greeting", () =>
 {
     var response = new
     {
@@ -26,6 +26,6 @@ app.MapGet("/api/Greeting",()=>
         TimeOnly = DateTime.Now.ToString("T")
     };
     return Results.Ok(response);
-}).WithName("Greeting"); 
+}).WithName("Greeting");
 
 app.Run();
