@@ -1,6 +1,8 @@
 
 using AeonRegistryAPI.Endpoints.Home;
+using AeonRegistryAPI.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,9 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 // Add an Admin policy
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+
+// Add email sender service
+builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
 // Enable validation for minimal APIs (This is a .NET 10 feature)
 builder.Services.AddValidation();  // Enforces [Required] and other data annotations
