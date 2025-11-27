@@ -1,11 +1,19 @@
 
 using AeonRegistryAPI.Endpoints.Home;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddCustomSwagger();
+
+// Get a connection string to the database from appsettings.json
+var connectionString = DataUtility.GetConnectionString(builder.Configuration);
+
+// Configure the database context to use PostgreSQL
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
