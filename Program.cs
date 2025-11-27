@@ -43,6 +43,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles(); // This allows serving static files like images from wwwroot folder
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<BlockIdentityEndpoints>();
 
 // Map Endpoints
 var authRouteGroup = app.MapGroup("/api/auth")
