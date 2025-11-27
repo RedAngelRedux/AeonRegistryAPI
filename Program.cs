@@ -1,4 +1,6 @@
 
+using AeonRegistryAPI.Endpoints.Home;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,15 +19,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles(); // This allows serving static files like images from wwwroot folder
 
-app.MapGet("/api/Greeting", () =>
-{
-    var response = new
-    {
-        Message = "Welcome to the Aeon Registry API!",
-        Version = "1.0.0",
-        TimeOnly = DateTime.Now.ToString("T")
-    };
-    return Results.Ok(response);
-}).WithName("Greeting");
+// Map Endpoints
+app.MapHomeEndpoints();
 
 app.Run();

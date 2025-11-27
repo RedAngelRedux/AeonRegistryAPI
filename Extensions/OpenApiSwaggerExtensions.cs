@@ -31,9 +31,9 @@ public static class OpenAPISwaggerExtensions
                         """,
                 Contact = new OpenApiContact
                 {
-                    Name = "Samuel V. Nava",
-                    Url = new Uri("https://sammynava.net"),
-                    Email = "dev@sammynava.com"
+                    Name = "GloboWeb",
+                    Url = new Uri("https://www.globoweb.us"),
+                    Email = "sammy@globoweb.us"
                 }
             });
 
