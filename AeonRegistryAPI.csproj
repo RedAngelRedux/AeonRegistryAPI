@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Endpoints\CustomIdentity\Models\Responses\" />
     <Folder Include="Models\Request\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
