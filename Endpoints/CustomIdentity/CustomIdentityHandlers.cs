@@ -1,8 +1,10 @@
 ﻿using AeonRegistryAPI.Endpoints.CustomIdentity.Models.Requests;
+using AeonRegistryAPI.Endpoints.CustomIdentity.Models.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 
@@ -55,19 +57,6 @@ public static class CustomIdentityHandlers
         await EmailLink(emailSender, request.Email,"Your New Account",
             "Your account has been created. Please change your password by visiting...",
             setPwdLink);
-
-        //await emailSender.SendEmailAsync(
-        //    request.Email,
-        //    "Your New Account",
-
-        //    $"""
-
-        //    Your account has been created.  Please change your password by visiting:  {baseURl}/SetPasswrod.html
-
-        //    {baseURl}/Setpassword.html?email={request.Email}&resetCode={encodeToken}
-
-        //    """
-        //    );
 
         return Results.Ok(new { Message = $"User, {request.Email}, created. Passsword reset email sent." });
     }
@@ -140,6 +129,29 @@ public static class CustomIdentityHandlers
             resetLink);
         
         return Results.Ok(new { Message = "If the user existes a forgot password link will be sent." });
+    }
+
+    public static async Task<IResult> GetProfileInfo(
+        ClaimsPrincipal userPrincipal,
+        UserManager<ApplicationUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(userPrincipal);
+        if(user is null)
+            return Results.NotFound(new { Message = "User not found." });
+
+        var profile = new UserProfileResponse
+        (
+            user.Id,
+            user.UserName,
+            user.Email,
+            user.LastName,
+            user.FirstName,
+            user.MiddleName,
+            user.FullName,
+            user.PhoneNumber
+        );
+        
+        return Results.Ok(profile);
     }
 
     private static async Task EmailLink(IEmailSender emailSender, [EmailAddress] string email, string subject, string body, string resetLink)

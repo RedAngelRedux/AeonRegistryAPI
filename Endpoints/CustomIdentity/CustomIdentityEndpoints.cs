@@ -40,6 +40,15 @@ public static class CustomIdentityEndpoints
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
 
+        group.MapGet("/manage/profile", CustomIdentityHandlers.GetProfileInfo)
+            .WithName("GetProfileInfo")
+            .WithDescription("Get current user's profile information.")
+            .WithSummary("Get the current users' profile")
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization();
+
 
         // TODO: Step 3:  Implement Route Handlers in CustomIdentityHandlers class        
 

@@ -44,7 +44,7 @@ public static class OpenAPISwaggerExtensions
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "Enter 'Bearer' [space] and then your valid JWT token."
+                Description = "Enter your valid JWT token."
             });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement

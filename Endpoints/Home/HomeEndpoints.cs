@@ -14,7 +14,9 @@ public static class HomeEndpoints
         homeGroup.MapGet("welcome", GetWelcomeMessage)
             .WithName("GetWelcomeMessage")
             .WithSummary("Welcome Message")
-            .WithDescription("Displays a welcome message");
+            .WithDescription("Displays a welcome message")
+            .Produces(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization();
          
         return route;       
     }
