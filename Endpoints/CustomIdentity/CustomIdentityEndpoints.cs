@@ -1,4 +1,5 @@
 ﻿using AeonRegistryAPI.Endpoints.CustomIdentity.Models.Requests;
+using AeonRegistryAPI.Endpoints.CustomIdentity.Models.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -23,6 +24,7 @@ public static class CustomIdentityEndpoints
             .WithDescription("Registerrs a user must have admin role.")
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
+        // TODO:  Replace RequireAuthroizatoin with AdminPoliy
         //.RequireAuthorization("AdminPolicy");
         ;
 
@@ -57,6 +59,19 @@ public static class CustomIdentityEndpoints
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
             .RequireAuthorization();
+
+        group.MapGet("/manage/users", CustomIdentityHandlers.ListAllUsers)
+            .WithName("ListAllUsers")
+            .WithDescription("Retrieve a list of all registered users.")
+            .WithSummary("List all users")
+            .Produces<IEnumerable<UserProfileResponse>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization();
+            
+
+        // TODO:  Replace RequireAuthroizatoin with AdminPoliy
+        //.RequireAuthorization("AdminPolicy");
 
 
         // TODO: Step 3:  Implement Route Handlers in CustomIdentityHandlers class        

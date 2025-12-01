@@ -181,6 +181,25 @@ public static class CustomIdentityHandlers
         return Results.Ok(new { Message = "Profile updated successfully." });
     }
 
+    public static async Task<IResult> ListAllUsers(
+        UserManager<ApplicationUser> userManager)
+    {
+        // Retrieve all users and map to UserProfileResponse
+        var users = userManager.Users.Select(u => new UserProfileResponse
+        (
+            u.Id,
+            u.UserName,
+            u.Email,
+            u.LastName,
+            u.FirstName,
+            u.MiddleName,
+            u.FullName,
+            u.PhoneNumber
+        )).ToList();
+
+        return Results.Ok(users);
+    }
+
     private static async Task EmailLink(IEmailSender emailSender, [EmailAddress] string email, string subject, string body, string resetLink)
     {
         await emailSender.SendEmailAsync(

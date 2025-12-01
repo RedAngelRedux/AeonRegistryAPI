@@ -60,3 +60,6 @@ app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 
 app.Run();
+
+// TODO:  Create a Role Manager
+// TODO:  Allow users to change their e-mail address
