@@ -49,6 +49,15 @@ public static class CustomIdentityEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .RequireAuthorization();
 
+        group.MapPut("/manage/profile", CustomIdentityHandlers.UpdateProfileInfo)
+            .WithName("UpdateProfileInfo")
+            .WithDescription("Update current user's profile information.")
+            .WithSummary("Update the current users' profile")
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization();
+
 
         // TODO: Step 3:  Implement Route Handlers in CustomIdentityHandlers class        
 

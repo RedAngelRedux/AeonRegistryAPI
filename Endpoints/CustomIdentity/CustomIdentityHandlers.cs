@@ -154,6 +154,33 @@ public static class CustomIdentityHandlers
         return Results.Ok(profile);
     }
 
+    public static async Task<IResult> UpdateProfileInfo(
+        UpdateUserProfileRequest request,
+        ClaimsPrincipal userPrincipal,
+        UserManager<ApplicationUser> userManager)
+    {
+        // Validate Inputs
+        if(String.IsNullOrEmpty(request.FirstName) || String.IsNullOrEmpty(request.LastName))
+            return Results.BadRequest(new { Message = "First and Last names are required." });
+
+        // Get the logged-in user
+        var user = await userManager.GetUserAsync(userPrincipal);
+        if (user is null)
+            return Results.NotFound(new { Message = "User not found." });
+
+        // Update fields
+        user.FirstName = request.FirstName;
+        user.LastName = request.LastName;
+        user.MiddleName = request.MiddleName;
+        // TODO: Add validation for phone number format
+        user.PhoneNumber = request.PhoneNumber;
+        var updated = await userManager.UpdateAsync(user);
+        if (!updated.Succeeded)
+            return Results.BadRequest(new { Message = "Could not update profile.", Details = updated.Errors });
+
+        return Results.Ok(new { Message = "Profile updated successfully." });
+    }
+
     private static async Task EmailLink(IEmailSender emailSender, [EmailAddress] string email, string subject, string body, string resetLink)
     {
         await emailSender.SendEmailAsync(
