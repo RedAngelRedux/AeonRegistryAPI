@@ -16,4 +16,13 @@ public class ApplicationUser : IdentityUser
     public string FullName => (MiddleName is not null) 
         ? $"{FirstName} {MiddleName} {LastName}" 
         : $"{FirstName} {LastName}";
+
+    public ResearchSpecialty ResearchSpecialty { get; set; }
+
+    public ICollection<CatalogRecord> SubmittedCatalogRecords { get; set;  } = [];
+
+    public ICollection<CatalogRecord> VerifiedCatalogRecords { get; set;  } = [];
+
+    public ICollection<ArtifactMediaFile> UploadedMediaFiles { get; set; } = [];
+
 }
