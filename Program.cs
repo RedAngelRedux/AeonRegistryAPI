@@ -59,6 +59,11 @@ authRouteGroup.MapIdentityApi<ApplicationUser>();
 app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 
+using(var scope = app.Services.CreateScope())
+{
+    await DataSeed.ManageDataAsync(scope.ServiceProvider);
+}
+
 app.Run();
 
 // TODO:  Create a Role Manager
