@@ -25,13 +25,33 @@ public static class SiteEndpoints
             .WithSummary("Get All Sites (Public)")
             .WithDescription("Returns all sites with their public data only.");
 
+        publicGrup.MapGet( "/{id:int}", GetPublicSiteById)
+            .WithName(nameof(GetPublicSiteById))
+            .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .WithSummary("Get Site By ID (Public)")
+            .WithDescription("Returns a site by its ID with public data only.");
+
         return route;
     }
 
     // The Handlers
-    private static async Task<Ok<List<PublicSiteResponse>>> GetAllPublicSites(ISiteService service,CancellationToken ct)
+    private static async Task<Ok<List<PublicSiteResponse>>> GetAllPublicSites(
+        ISiteService service, 
+        CancellationToken ct)
     {
         return TypedResults.Ok(await service.GetAllPublicSitesAsync(ct));
+    }
+
+    private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetPublicSiteById(
+      int id,
+      ISiteService service,
+      CancellationToken ct)
+    {
+        var site = await service.GetPublicSiteByIdAsync(id, ct);
+
+        return (site is null) ? TypedResults.NotFound() : TypedResults.Ok(site);
     }
 }
    
