@@ -35,48 +35,71 @@ public static class SiteEndpoints
 
         // define the privateGroup (for Swagger's benefit)
         var privateGroup = route.MapGroup("/api/private/sites")
-            .RequireAuthorization()            
+            .RequireAuthorization()
             .WithSummary("Private Site Endpoints")
             .WithDescription("Endpoints that expose private site data.")
             .WithTags("Sites - Private")
             .AddEndpointFilter<ExceptionHandlingFilter>();
 
-        privateGroup.MapGet("",GetAllPrivateSites)
+        privateGroup.MapGet("", GetAllPrivateSites)
             .WithName(nameof(GetAllPrivateSites))
             .WithSummary("Private Site Endpoints")
             .WithDescription("Endpoints that expose private site data.")
             .WithTags("Sites - Private")
             .Produces<List<PrivateSiteResponse>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+        privateGroup.MapGet("/{id:int}", GetPrivateSiteById)
+            .WithName(nameof(GetPrivateSiteById))
+            .WithSummary("Get Site By ID (Private)")
+            .WithDescription("Returns a site by its ID with Private data only.")
+            .Produces<PrivateSiteResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status500InternalServerError);
 
         return route;
     }
 
     // The Handlers
-    private static async Task<Ok<List<PrivateSiteResponse>>> GetAllPrivateSites(
-    ISiteService service,
-    CancellationToken ct)
-    {
-        return TypedResults.Ok(await service.GetAllPrivateSitesAsync(ct));
-    }
 
     private static async Task<Ok<List<PublicSiteResponse>>> GetAllPublicSites(
-        ISiteService service, 
+        ISiteService service,
         CancellationToken ct)
     {
         return TypedResults.Ok(await service.GetAllPublicSitesAsync(ct));
     }
 
     private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetPublicSiteById(
-      int id,
-      ISiteService service,
-      CancellationToken ct)
+        int id,
+        ISiteService service,
+        CancellationToken ct)
     {
         var site = await service.GetPublicSiteByIdAsync(id, ct);
 
         return (site is null) ? TypedResults.NotFound() : TypedResults.Ok(site);
     }
+
+    private static async Task<Ok<List<PrivateSiteResponse>>> GetAllPrivateSites(
+        ISiteService service,
+        CancellationToken ct)
+    {
+        return TypedResults.Ok(await service.GetAllPrivateSitesAsync(ct));
+    }
+
+    private static async Task<Results<Ok<PrivateSiteResponse>, NotFound>> GetPrivateSiteById(
+        int id,
+        ISiteService service,
+        CancellationToken ct)
+    {
+        var site = await service.GetPrivateSiteByIdAsync(id, ct);
+
+        return (site is null) ? TypedResults.NotFound() : TypedResults.Ok(site);
+    }
+
 }
-   
+
