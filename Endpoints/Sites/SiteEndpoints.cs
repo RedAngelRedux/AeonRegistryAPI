@@ -1,6 +1,7 @@
 ﻿using AeonRegistryAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using AeonRegistryAPI.Filters;
+using AeonRegistryAPI.Models.Request;
 
 namespace AeonRegistryAPI.Endpoints.Sites;
 
@@ -40,6 +41,17 @@ public static class SiteEndpoints
             .WithDescription("Endpoints that expose private site data.")
             .WithTags("Sites - Private")
             .AddEndpointFilter<ExceptionHandlingFilter>();
+
+        privateGroup.MapPost("", CreateSite)
+            .WithName(nameof(CreateSite))
+            .WithSummary("Create a New Site")
+            .WithDescription("Creates a new site with the provided data and returns the new site's details.")
+            .Accepts<CreateSiteRequest>("application/json")
+            .Produces<PrivateSiteResponse>(StatusCodes.Status201Created)
+            .Produces<ValidationProblem>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
 
         privateGroup.MapGet("", GetAllPrivateSites)
             .WithName(nameof(GetAllPrivateSites))
@@ -101,5 +113,25 @@ public static class SiteEndpoints
         return (site is null) ? TypedResults.NotFound() : TypedResults.Ok(site);
     }
 
+    private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(
+     CreateSiteRequest request,
+     ISiteService service,
+     CancellationToken ct)
+    {
+        if (request is null)
+        {
+            var value = new[] { "Request is required" };
+            return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+            {
+                { "Request", value }
+            });
+        }
+
+        var created = await service.CreateSiteAsync(request, ct);
+
+        return TypedResults.Created($"/api/private/sites/{created.Id}", created);
+    }
+
 }
+
 

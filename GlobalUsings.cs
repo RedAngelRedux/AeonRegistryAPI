@@ -5,3 +5,5 @@ global using AeonRegistryAPI.Data;
 global using AeonRegistryAPI.Models;
 global using AeonRegistryAPI.Middleware;
 global using AeonRegistryAPI.Enums;
+global using AeonRegistryAPI.Models.Request;
+global using AeonRegistryAPI.Services.Interfaces;

@@ -1,11 +1,45 @@
-﻿using AeonRegistryAPI.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace AeonRegistryAPI.Services;
 
 public class SiteService(ApplicationDbContext db) : ISiteService
 {
 
+    /* POST Endpoints (C) */
+    public async Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct)
+    {
+        // Initialize new Site entity with request data
+        var site = new Site
+        {
+            Name = request.Name,
+            Location = request.Location,
+            Coordinates = request.Coordinates,
+            Latitude = request.Latitude,
+            Longitude = request.Longitude,
+            Description = request.Description,
+            PublicNarrative = request.PublicNarrative,
+            AeonNarrative = request.AeonNarrative
+        };
+
+        // Add to database and save changes
+        db.Sites.Add(site);
+        await db.SaveChangesAsync(ct);
+
+        return new PrivateSiteResponse
+        (
+            site.Id,
+            site.Name!,
+            site.Location!,
+            site.Coordinates,
+            site.Latitude,
+            site.Longitude,
+            site.Description,
+            site.PublicNarrative,
+            site.AeonNarrative
+        );
+    }
+
+    /* GET Endpoints (u) */
     public async Task<List<PublicSiteResponse>> GetAllPublicSitesAsync(CancellationToken ct)
     {
         return await db.Sites
@@ -77,4 +111,9 @@ public class SiteService(ApplicationDbContext db) : ISiteService
                 s.AeonNarrative
             )).FirstOrDefaultAsync(cancellationToken: ct);
     }
+
+    /* POST Endpoints (C) */
+
+    // PUT Endpoints (U) */
+
 }
