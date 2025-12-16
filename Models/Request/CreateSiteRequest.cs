@@ -2,24 +2,24 @@
 
 public record CreateSiteRequest(
     [Required, MaxLength(200)] 
-    string Name,
+    string? Name,
 
     [Required, MaxLength(100)] 
-    string Location,
+    string? Location,
 
     [MaxLength(100)] 
-    string Coordinates,
+    string? Coordinates,
 
     double Latitude,
 
     double Longitude,
 
     [MaxLength(200)] 
-    string Description,
+    string? Description,
 
     [MaxLength(2000)] 
-    string PublicNarrative,
+    string? PublicNarrative,
 
     [MaxLength(2000)] 
-    string AeonNarrative
+    string? AeonNarrative
 ); 

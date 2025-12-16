@@ -17,6 +17,7 @@ public interface ISiteService
     Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int id, CancellationToken ct);
 
     /* PUT Endpoints (U) */
+    Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct);
 
     /* DELETE Endpoints (D) */
 

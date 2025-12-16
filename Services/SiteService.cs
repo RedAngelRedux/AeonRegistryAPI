@@ -113,6 +113,28 @@ public class SiteService(ApplicationDbContext db) : ISiteService
     }
 
     /* POST Endpoints (C) */
+    public async Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct)
+    {
+
+        var existingSite = await db.Sites.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct);
+        if (existingSite == null) 
+            return false;
+
+        existingSite.Name = request.Name;
+        existingSite.Location = request.Location;
+        existingSite.Coordinates = request.Coordinates;
+        existingSite.Latitude = request.Latitude;
+        existingSite.Longitude = request.Longitude;
+        existingSite.Description = request.Description;
+        existingSite.PublicNarrative = request.PublicNarrative;
+        existingSite.AeonNarrative = request.AeonNarrative;
+
+        db.Sites.Update(existingSite);
+        await db.SaveChangesAsync(ct);
+
+        return true;
+    }
+
 
     // PUT Endpoints (U) */
 

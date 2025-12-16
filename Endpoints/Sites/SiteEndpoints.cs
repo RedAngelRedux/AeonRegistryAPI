@@ -10,6 +10,7 @@ public static class SiteEndpoints
     // Endpoint Groups
     public static IEndpointRouteBuilder MapSiteEndpoints(this IEndpointRouteBuilder route)
     {
+        #region PublicSiteGroup
         // define the publicGroup (for Swagger's benefit)
         var publicGroup = route.MapGroup("/api/public/sites")
             .AllowAnonymous()
@@ -33,7 +34,9 @@ public static class SiteEndpoints
             .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
+        #endregion PublicSiteGroup
 
+        #region PrivateSiteGroup
         // define the privateGroup (for Swagger's benefit)
         var privateGroup = route.MapGroup("/api/private/sites")
             .RequireAuthorization()
@@ -74,10 +77,48 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        privateGroup.MapPut("/{id:int}", UpdateSite)
+            .WithName(nameof(UpdateSite))
+            .WithSummary("Update an Existing Site")
+            .WithDescription("Updates an existing site with the provided data.")
+            .Accepts<UpdateSiteRequest>("application/json")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .ProducesValidationProblem();
+
+        #endregion PrivateSiteGroup
+
         return route;
     }
 
-    // The Handlers
+    /* The Handlers */
+
+    #region PostHandlers
+    /* Create (C) */
+
+    private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(
+     CreateSiteRequest request,
+     ISiteService service,
+     CancellationToken ct)
+    {
+        if (request is null)
+        {
+            var value = new[] { "Request is required" };
+            return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+            {
+                { "Request", value }
+            });
+        }
+
+        var created = await service.CreateSiteAsync(request, ct);
+
+        return TypedResults.Created($"/api/private/sites/{created.Id}", created);
+    }
+    #endregion PostHandlers
+
+    #region GetHandlers
+    /* Read (R) */
 
     private static async Task<Ok<List<PublicSiteResponse>>> GetAllPublicSites(
         ISiteService service,
@@ -112,25 +153,23 @@ public static class SiteEndpoints
 
         return (site is null) ? TypedResults.NotFound() : TypedResults.Ok(site);
     }
+    #endregion GetHandlers
 
-    private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(
-     CreateSiteRequest request,
-     ISiteService service,
-     CancellationToken ct)
+    #region PutHandlers
+    /* Update (U) */
+
+    private static async Task<Results<NoContent, NotFound>> UpdateSite(
+        int id,
+        UpdateSiteRequest request,
+        ISiteService service,
+        CancellationToken ct)
     {
-        if (request is null)
-        {
-            var value = new[] { "Request is required" };
-            return TypedResults.ValidationProblem(new Dictionary<string, string[]>
-            {
-                { "Request", value }
-            });
-        }
-
-        var created = await service.CreateSiteAsync(request, ct);
-
-        return TypedResults.Created($"/api/private/sites/{created.Id}", created);
+        return (await service.UpdateSiteAsync(id, request, ct)) 
+            ? TypedResults.NoContent() 
+            : TypedResults.NotFound();
     }
+
+    #endregion PutHandlers
 
 }
 
