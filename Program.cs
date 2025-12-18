@@ -2,8 +2,10 @@
 using AeonRegistryAPI.Endpoints.CustomIdentity;
 using AeonRegistryAPI.Endpoints.Home;
 using AeonRegistryAPI.Endpoints.Sites;
+using AeonRegistryAPI.Middleware;
 using AeonRegistryAPI.Services;
 using AeonRegistryAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -50,11 +52,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Register custom global exception handling middleware FIRST
+app.UseMiddleware<BlockIdentityEndpoints>();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles(); // This allows serving static files like images from wwwroot folder
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<BlockIdentityEndpoints>();
+
 
 // Map Endpoints
 var authRouteGroup = app.MapGroup("/api/auth")

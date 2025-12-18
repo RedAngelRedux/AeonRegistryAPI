@@ -1,4 +1,6 @@
-﻿namespace AeonRegistryAPI.Middleware;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace AeonRegistryAPI.Middleware;
 
 public class BlockIdentityEndpoints(RequestDelegate next)
 {
@@ -19,9 +21,21 @@ public class BlockIdentityEndpoints(RequestDelegate next)
         if (requestPath != null && _blockedPaths.Contains(requestPath))
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
-            await context.Response.WriteAsync("The Endpoint Does Not Exist.");
+            context.Response.ContentType = "application/problem+json";
+
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "Not Found",
+                Detail = "The endpoint does not exist.",
+                Instance = context.Request.Path
+            };
+
+            await context.Response.WriteAsJsonAsync(problemDetails);
             return;
         }
+
+        // Let GlobalExceptionHandlingMiddleware handle any downstream exceptions
         await _next(context);
     }
 }
