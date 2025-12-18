@@ -112,7 +112,7 @@ public class SiteService(ApplicationDbContext db) : ISiteService
             )).FirstOrDefaultAsync(cancellationToken: ct);
     }
 
-    /* POST Endpoints (C) */
+    /* PUT Endpoints (U) */
     public async Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct)
     {
 
@@ -135,7 +135,19 @@ public class SiteService(ApplicationDbContext db) : ISiteService
         return true;
     }
 
+    /* DELETE Endpoints (D) */
+    public async Task<bool> DeleteSiteAsync(int id, CancellationToken ct)
+    {
+        var existingSite = await db.Sites.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct);
+        if (existingSite == null)
+            return false;
 
-    // PUT Endpoints (U) */
+        db.Sites.Remove(existingSite);
+        await db.SaveChangesAsync(ct);
+
+        return true;
+    }
+
+
 
 }

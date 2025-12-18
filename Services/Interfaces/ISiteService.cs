@@ -20,5 +20,6 @@ public interface ISiteService
     Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct);
 
     /* DELETE Endpoints (D) */
+    Task<bool> DeleteSiteAsync(int id, CancellationToken ct);
 
 }

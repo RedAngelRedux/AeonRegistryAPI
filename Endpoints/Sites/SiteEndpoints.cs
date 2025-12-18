@@ -84,8 +84,18 @@ public static class SiteEndpoints
             .Accepts<UpdateSiteRequest>("application/json")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError)
             .ProducesValidationProblem();
+
+        privateGroup.MapDelete("/{id:int}", DeleteSite)
+            .WithName(nameof(DeleteSite))
+            .WithSummary("Delete a Site")
+            .WithDescription("Deletes a site by its ID.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status500InternalServerError);
 
         #endregion PrivateSiteGroup
 
@@ -170,6 +180,21 @@ public static class SiteEndpoints
     }
 
     #endregion PutHandlers
+
+    #region DeleteHandlers
+    /* Delete (D) */
+
+    private static async Task<Results<NoContent, NotFound>> DeleteSite(
+        int id,
+        ISiteService service,
+        CancellationToken ct)
+    {
+        return (await service.DeleteSiteAsync(id, ct))
+            ? TypedResults.NoContent()
+            : TypedResults.NotFound();
+    }
+
+    #endregion DeleteHandlers
 
 }
 
