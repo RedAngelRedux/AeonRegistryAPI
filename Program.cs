@@ -1,11 +1,9 @@
 
+using AeonRegistryAPI.Endpoints.Artifacts;
 using AeonRegistryAPI.Endpoints.CustomIdentity;
 using AeonRegistryAPI.Endpoints.Home;
 using AeonRegistryAPI.Endpoints.Sites;
-using AeonRegistryAPI.Middleware;
 using AeonRegistryAPI.Services;
-using AeonRegistryAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -70,8 +68,9 @@ authRouteGroup.MapIdentityApi<ApplicationUser>();
 app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 app.MapSiteEndpoints();
+app.MapArtifactMediaFileEndpoints();
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     await DataSeed.ManageDataAsync(scope.ServiceProvider);
 }
