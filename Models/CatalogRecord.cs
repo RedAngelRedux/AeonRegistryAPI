@@ -16,7 +16,7 @@ public class CatalogRecord
 
     public ApplicationUser? SubmittedBy { get; set; } = null;
 
-    public string VerifiedById { get; set; } = string.Empty;  // FK to ApplicationUser
+    public string? VerifiedById { get; set; } = string.Empty;  // FK to ApplicationUser
 
     public ApplicationUser? VerifiedBy { get; set; } = null;
 

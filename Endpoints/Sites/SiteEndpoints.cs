@@ -1,6 +1,5 @@
 ﻿using AeonRegistryAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
-using AeonRegistryAPI.Filters;
 using AeonRegistryAPI.Models.Request;
 
 namespace AeonRegistryAPI.Endpoints.Sites;
@@ -16,8 +15,7 @@ public static class SiteEndpoints
             .AllowAnonymous()
             .WithSummary("Public Site Endpoints")
             .WithDescription("Endpoints that expose public site data.")
-            .WithTags("Sites - Public")
-            .AddEndpointFilter<ExceptionHandlingFilter>();
+            .WithTags("Sites - Public");
 
         // define the endpoints
         publicGroup.MapGet("", GetAllPublicSites)
@@ -42,8 +40,7 @@ public static class SiteEndpoints
             .RequireAuthorization()
             .WithSummary("Private Site Endpoints")
             .WithDescription("Endpoints that expose private site data.")
-            .WithTags("Sites - Private")
-            .AddEndpointFilter<ExceptionHandlingFilter>();
+            .WithTags("Sites - Private");
 
         privateGroup.MapPost("", CreateSite)
             .WithName(nameof(CreateSite))

@@ -174,7 +174,7 @@ public class DataSeed
                 {
                     ArtifactId = artifact.Id,
                     SubmittedById = submittedBy.Id,
-                    VerifiedById = verifiedBy?.Id,
+                    VerifiedById = verifiedBy!.Id,
                     Status = CatalogStatus.Draft, // Default to Draft
                     DateSubmitted = recordImport.DateSubmitted
                 };

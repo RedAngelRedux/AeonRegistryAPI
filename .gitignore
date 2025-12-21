@@ -73,6 +73,9 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+# Exception: Allow Endpoints/Artifacts folder (contains source code)
+!/Endpoints/Artifacts/
+!/Endpoints/Artifacts/**
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
