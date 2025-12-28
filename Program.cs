@@ -37,6 +37,7 @@ builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
 // Custom Services
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IArtifactService, ArtifactService>();
 
 // Enable validation for minimal APIs (This is a .NET 10 feature)
 builder.Services.AddValidation();  // Enforces [Required] and other data annotations
@@ -69,6 +70,7 @@ app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 app.MapSiteEndpoints();
 app.MapArtifactMediaFileEndpoints();
+app.MapArtifactEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
