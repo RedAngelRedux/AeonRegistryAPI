@@ -128,7 +128,7 @@ namespace AeonRegistryAPI.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<string>("PublicDescription")
+                    b.Property<string>("PublicNarrative")
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 

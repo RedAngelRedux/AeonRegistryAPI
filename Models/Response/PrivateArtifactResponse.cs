@@ -6,7 +6,7 @@ public class PrivateArtifactResponse
     public int Id { get; set; }
     public string? Name { get; set; }
     public string? CatalogNumber { get; set; }
-    public string? PublicDescription { get; set; }
+    public string? PublicNarrative { get; set; }
     public string? Descriiption { get; set; }
     public DateTime DateDiscovered { get; set; }
     public ArtifactType Type { get; set; }

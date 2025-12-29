@@ -14,7 +14,7 @@ public class Artifact
     public string? Description { get; set; }  // Aeon internal description
 
     [MaxLength(2000)]
-    public string? PublicDescription { get; set; }
+    public string? PublicNarrative { get; set; }
 
     public DateTime DateDiscovered { get; set; }
 
