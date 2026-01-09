@@ -27,4 +27,6 @@ public interface IArtifactService
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of private artifact
     /// responses. The list is empty if no private artifacts are available.</returns>
     Task<List<PrivateArtifactResponse>> GetPrivateArtifactsAsync(CancellationToken ct);
+
+    Task<List<PrivateArtifactResponse>> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
 }

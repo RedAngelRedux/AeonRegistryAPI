@@ -1,6 +1,5 @@
-﻿using AeonRegistryAPI.Services.Interfaces;
+﻿
 using Microsoft.AspNetCore.Http.HttpResults;
-using AeonRegistryAPI.Models.Request;
 
 namespace AeonRegistryAPI.Endpoints.Sites;
 
@@ -81,6 +80,15 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+        privateGroup.MapGet("/{siteId:int}/artifacts", GetPrivateArtifactsBySite)
+            .WithName(nameof(GetPrivateArtifactsBySite))
+            .WithSummary("Get Private Artifacts by Site Id")
+            .WithDescription("Returns a list of private artifacts associated with the specified site Id")
+            .Produces<List<PublicArtifactResponse>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError);
 
         privateGroup.MapPut("/{id:int}", UpdateSite)
@@ -212,6 +220,18 @@ public static class SiteEndpoints
         CancellationToken ct)
     {
         var artifacts = await artifactService.GetPublicArtifactsBySiteAsync(siteId, ct)!;
+        if (artifacts is null || artifacts.Count <= 0)
+            return TypedResults.NotFound();
+
+        return TypedResults.Ok(artifacts);
+    }
+
+    private static async Task<Results<Ok<List<PrivateArtifactResponse>>, NotFound>> GetPrivateArtifactsBySite(
+        int siteId,
+        IArtifactService artifactService,
+        CancellationToken ct)
+    {
+        var artifacts = await artifactService.GetPrivateArtifactsBySiteAsync(siteId, ct)!;
         if (artifacts is null || artifacts.Count <= 0)
             return TypedResults.NotFound();
 
