@@ -32,6 +32,15 @@ public static class ArtifactEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        privateGroup.MapPost("", CreateArtifactHandler)
+            .WithName(nameof(CreateArtifactHandler))
+            .WithSummary("Create an Artifact for a Site")
+            .WithDescription("Creates a new Artifact, including private fields, for a Site.")
+            .Produces<PrivateArtifactResponse>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);            
+
         return route;
     }
 
@@ -55,5 +64,17 @@ public static class ArtifactEndpoints
         if(artifacts is null || artifacts.Count <= 0)
             return TypedResults.NotFound();
         return TypedResults.Ok(artifacts);
+    }
+
+    private static async Task<Results<Created<PrivateArtifactResponse>,NotFound>> CreateArtifactHandler(
+        IArtifactService artifactService,
+        CreateArtifactRequest request,
+        CancellationToken ct)
+    {
+        var createdArtifact = await artifactService.CreateArtifactAsync(request, ct);
+        if (createdArtifact is null)
+            return TypedResults.NotFound();
+
+        return TypedResults.Created($"/api/private/artifacts/{createdArtifact.Id}", createdArtifact);
     }
 }

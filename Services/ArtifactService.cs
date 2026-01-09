@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace AeonRegistryAPI.Services;
 
@@ -98,5 +99,43 @@ public class ArtifactService(
                                     .Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
             }).ToListAsync(ct);
 
+    }
+
+    public async Task<PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct)
+    {
+        var site = await db.Sites.FindAsync([request.SiteId, ct], cancellationToken: ct);
+        if (site == null)
+            return null;
+
+        if (!Enum.TryParse<ArtifactType>(request.Type,true,out var artifactType))
+            throw new ArgumentException($"Invalid artifact type: {request.Type}");
+
+        var artifact = new Artifact
+        {
+            Name = request.Name,
+            CatalogNumber = request.CatalogNumber,
+            Description = request.Description,
+            PublicNarrative = request.PublicNarrative,
+            Type = artifactType,
+            SiteId = request.SiteId,
+            DateDiscovered = request.DateDiscovered
+        };
+
+        db.Artifacts.Add(artifact);
+        await db.SaveChangesAsync(ct);
+
+        return new PrivateArtifactResponse
+        {
+            Id = artifact.Id,
+            Name = artifact.Name,
+            CatalogNumber = artifact.CatalogNumber,
+            PublicNarrative = artifact.PublicNarrative,
+            Descriiption = artifact.Description,
+            DateDiscovered = artifact.DateDiscovered,
+            Type = artifact.Type,
+            SiteId = artifact.SiteId,
+            SiteName = site.Name,
+            PrimaryImageurl = string.Empty
+        };
     }
 }

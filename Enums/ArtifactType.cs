@@ -12,5 +12,5 @@ public enum ArtifactType
     Tool = 5,
     Monolith = 6,
     Device = 7,
-    Unknown = 8
+    Unknown = 99
 }

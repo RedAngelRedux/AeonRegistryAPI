@@ -47,6 +47,9 @@ public static class OpenAPISwaggerExtensions
                 Description = "Enter your valid JWT token."
             });
 
+            c.UseInlineDefinitionsForEnums();
+            c.SchemaFilter<Filters.EnumStringFilter>();
+
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using AeonRegistryAPI.Enums;
 
-namespace AeonRegistryAPI.ValidationAttributes;
+namespace AeonRegistryAPI.Attributes;
 
 /// <summary>
 /// Validates that a string value represents a valid CatalogStatus enum value.
