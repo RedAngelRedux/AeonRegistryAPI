@@ -10,18 +10,41 @@ public class ArtifactService(
 {
     public async Task<List<PublicArtifactResponse>> GetPublicArtifactsAsync(CancellationToken ct)
     {
-       return await db.Artifacts.AsNoTracking().Include(a => a.Site).Include(a => a.MediaFiles).Select(a => new PublicArtifactResponse
-       {
-           Id = a.Id,
-           Name = a.Name,
-           CatalogNumber = a.CatalogNumber,
-           PublicNarrative = a.PublicNarrative,
-           DateDiscovered = a.DateDiscovered,
-           Type = a.Type,
-           SiteId = a.SiteId,
-           SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-           PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
-       }).ToListAsync(ct);
+       return await db.Artifacts
+            .AsNoTracking()
+            //.Include(a => a.Site)
+            //.Include(a => a.MediaFiles)
+            .Select(a => new PublicArtifactResponse
+            {
+                Id = a.Id,
+                Name = a.Name,
+                CatalogNumber = a.CatalogNumber,
+                PublicNarrative = a.PublicNarrative,
+                DateDiscovered = a.DateDiscovered,
+                Type = a.Type,
+                SiteId = a.SiteId,
+                SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
+                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+            }).ToListAsync(ct);
+    }
+
+    public async Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int artifactId, CancellationToken ct)
+    {
+        return await db.Artifacts
+            .AsNoTracking()
+            .Where(a => a.Id == artifactId)
+            .Select(a => new PublicArtifactResponse
+            {
+                Id = a.Id,
+                Name = a.Name,
+                CatalogNumber = a.CatalogNumber,
+                PublicNarrative = a.PublicNarrative,
+                DateDiscovered = a.DateDiscovered,
+                Type = a.Type,
+                SiteId = a.SiteId,
+                SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
+                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+            }).FirstOrDefaultAsync(ct);
     }
 
     public async Task<List<PublicArtifactResponse>> GetPublicArtifactsBySiteAsync(int siteId, CancellationToken ct)
@@ -35,8 +58,8 @@ public class ArtifactService(
         return await db.Artifacts
             .AsNoTracking()
             .Where(a => a.SiteId == siteId)
-            .Include(a => a.Site)
-            .Include(a => a.MediaFiles)
+            //.Include(a => a.Site)
+            //.Include(a => a.MediaFiles)
             .Select(a => new PublicArtifactResponse
             {
                 Id = a.Id,
@@ -55,19 +78,24 @@ public class ArtifactService(
 
     public async Task<List<PrivateArtifactResponse>> GetPrivateArtifactsAsync(CancellationToken ct)
     {
-        return await db.Artifacts.AsNoTracking().Include(a => a.Site).Include(a => a.MediaFiles).Select(a => new PrivateArtifactResponse
-        {
-            Id = a.Id,
-            Name = a.Name,
-            CatalogNumber = a.CatalogNumber,
-            PublicNarrative = a.PublicNarrative,
-            Descriiption = a.Description,
-            DateDiscovered = a.DateDiscovered,
-            Type = a.Type,
-            SiteId = a.SiteId,
-            SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-            PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
-        }).ToListAsync(ct);
+        return await db.Artifacts
+            .AsNoTracking()
+            //.Include(a => a.Site)
+            //.Include(a => a.MediaFiles)
+            .Select(a => new PrivateArtifactResponse
+            {
+                Id = a.Id,
+                Name = a.Name,
+                CatalogNumber = a.CatalogNumber,
+                PublicNarrative = a.PublicNarrative,
+                Description = a.Description,
+                DateDiscovered = a.DateDiscovered,
+                Type = a.Type,
+                SiteId = a.SiteId,
+                SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
+                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+            })
+            .ToListAsync(ct);
     }
 
     public async Task<List<PrivateArtifactResponse>> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct)
@@ -81,15 +109,15 @@ public class ArtifactService(
         return await db.Artifacts
             .AsNoTracking()
             .Where(a => a.SiteId == siteId)
-            .Include(a => a.Site)
-            .Include(a => a.MediaFiles)
+            //.Include(a => a.Site)
+            //.Include(a => a.MediaFiles)
             .Select(a => new PrivateArtifactResponse
             {
                 Id = a.Id,
                 Name = a.Name,
                 CatalogNumber = a.CatalogNumber,
                 PublicNarrative = a.PublicNarrative,
-                Descriiption = a.Description,
+                Description = a.Description,
                 DateDiscovered = a.DateDiscovered,
                 Type = a.Type,
                 SiteId = a.SiteId,
@@ -130,12 +158,32 @@ public class ArtifactService(
             Name = artifact.Name,
             CatalogNumber = artifact.CatalogNumber,
             PublicNarrative = artifact.PublicNarrative,
-            Descriiption = artifact.Description,
+            Description = artifact.Description,
             DateDiscovered = artifact.DateDiscovered,
             Type = artifact.Type,
             SiteId = artifact.SiteId,
             SiteName = site.Name,
             PrimaryImageurl = string.Empty
         };
+    }
+
+    public async Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int artifactId, CancellationToken ct)
+    {
+        return await db.Artifacts
+            .AsNoTracking()
+            .Where(a => a.Id == artifactId)
+            .Select(a => new PrivateArtifactResponse
+            {
+                Id = a.Id,
+                Name = a.Name,
+                CatalogNumber = a.CatalogNumber,
+                PublicNarrative = a.PublicNarrative,
+                Description = a.Description,
+                DateDiscovered = a.DateDiscovered,
+                Type = a.Type,
+                SiteId = a.SiteId,
+                SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
+                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+            }).FirstOrDefaultAsync(ct);
     }
 }

@@ -7,7 +7,7 @@ public class PrivateArtifactResponse
     public string? Name { get; set; }
     public string? CatalogNumber { get; set; }
     public string? PublicNarrative { get; set; }
-    public string? Descriiption { get; set; }
+    public string? Description { get; set; }
     public DateTime DateDiscovered { get; set; }
     public ArtifactType Type { get; set; }
     public int SiteId { get; set; }

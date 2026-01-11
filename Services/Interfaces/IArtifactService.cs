@@ -10,6 +10,9 @@ public interface IArtifactService
     /// The list is empty if no public artifacts are found.</returns>
     Task<List<PublicArtifactResponse>> GetPublicArtifactsAsync(CancellationToken ct);
 
+    Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int artifactId, CancellationToken ct);
+    
+
     /// <summary>
     /// Asynchronously retrieves a list of public artifacts associated with the specified site.
     /// </summary>
@@ -27,6 +30,8 @@ public interface IArtifactService
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of private artifact
     /// responses. The list is empty if no private artifacts are available.</returns>
     Task<List<PrivateArtifactResponse>> GetPrivateArtifactsAsync(CancellationToken ct);
+
+    Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int artifactId, CancellationToken ct);
 
     Task<List<PrivateArtifactResponse>> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
 
