@@ -218,9 +218,46 @@ public class ArtifactService(
 
         return true;
     }
+
     #endregion
 
     #region Delete
     // The D in CRUD
+
+    public async Task<bool> DeleteArtifactAsync(int artifactId, CancellationToken ct)
+    {
+        // Validate Artifact exists
+        var artifactExists = await db.Artifacts.AsNoTracking().AnyAsync(a => a.Id == artifactId, cancellationToken: ct);
+        if (!artifactExists)
+            return false;
+
+        // Get the artifact and its dependencies
+        var artifact = await db.Artifacts
+            .Include(a => a.MediaFiles)
+            //.Include(a => a.CatalogRecords)
+            .FirstOrDefaultAsync(artifact => artifact.Id == artifactId, cancellationToken: ct);
+        if (artifact == null)
+            return false;
+
+        // Remove dependent MediaFiles
+        if(artifact.MediaFiles != null && artifact.MediaFiles.Count > 0)
+        {
+            db.ArtifactMediaFiles.RemoveRange(artifact.MediaFiles);
+        }
+
+        // TODO:  Decide how to handle CatalogRecords on Artifact deletion since we also have CatalogNotes linked to CatalogRecords
+        //// Remove dependent CatalogRecords
+        //if(artifact.CatalogRecords != null && artifact.CatalogRecords.Count > 0)
+        //{
+        //    db.CatalogRecords.RemoveRange(artifact.CatalogRecords);
+        //}
+
+        db.Artifacts.Remove(artifact);
+
+        await db.SaveChangesAsync(ct);
+
+        return true;
+    }
+
     #endregion
 }

@@ -79,5 +79,7 @@ public interface IArtifactService
 
     #region Delete
     // The D in CRUD
+
+    Task<bool> DeleteArtifactAsync(int artifactId, CancellationToken ct);
     #endregion
 }

@@ -70,6 +70,15 @@ public static class ArtifactEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces<ValidationProblem>(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
+
+        privateGroup.MapDelete("/{artifactId:int}", DeleteArtifactHandler)
+            .WithName(nameof(DeleteArtifactHandler))
+            .WithSummary("Delete an Artifact by ID")
+            .WithDescription("Deletes an existing Artifact by its unique identifier.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
         #endregion
 
         return route;
@@ -141,6 +150,15 @@ public static class ArtifactEndpoints
     {
         var updated = await artifactService.UpdateArtifactAsync(artifactId, request, ct);
         return (updated) ? TypedResults.NoContent() : TypedResults.NotFound();
+    }
+
+    private static async Task<Results<NoContent, NotFound>> DeleteArtifactHandler(
+        IArtifactService artifactService,
+        int artifactId,
+        CancellationToken ct)
+    {
+        var deleted = await artifactService.DeleteArtifactAsync(artifactId, ct);
+        return (deleted) ? TypedResults.NoContent() : TypedResults.NotFound();
     }
     #endregion
 }
