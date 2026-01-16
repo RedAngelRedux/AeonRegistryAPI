@@ -26,8 +26,8 @@ public static class ArtifactMediaFileEndpoints
             .WithTags("Artifact Images");
 
         publicGroup
-            .MapGet("/{id:int}", GetArtifacImaget)
-            .WithName(nameof(GetArtifacImaget))
+            .MapGet("/{id:int}", GetArtifactImage)
+            .WithName(nameof(GetArtifactImage))
             .WithSummary("Get Primary Artifact Image By ID")
             .WithDescription("Returns the primary image for the specified ArtifactMediaFile ID.")
             .Produces<FileContentHttpResult>(StatusCodes.Status200OK)
@@ -50,7 +50,7 @@ public static class ArtifactMediaFileEndpoints
     /// <param name="response">The HTTP response object to which cache control headers will be added if the image is found.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A result containing the file content of the artifact image if found; otherwise, a not found result.</returns>
-    private static async Task<Results<FileContentHttpResult, NotFound>> GetArtifacImaget(
+    private static async Task<Results<FileContentHttpResult, NotFound>> GetArtifactImage(
         int id, // This is the ArtifactMediaFile.Id, not the Artifact.Id
         ApplicationDbContext db,
         HttpResponse response,

@@ -14,6 +14,6 @@ public class PrivateArtifactResponse
 
     // Additional Properties
     public string? SiteName { get; set; }
-    public string? PrimaryImageurl { get; set; }
+    public string? PrimaryImageUrl { get; set; }
 
 }

@@ -45,7 +45,7 @@ public class ArtifactService(
             Type = artifact.Type,
             SiteId = artifact.SiteId,
             SiteName = site.Name,
-            PrimaryImageurl = string.Empty
+            PrimaryImageUrl = string.Empty
         };
     }
     #endregion
@@ -66,7 +66,7 @@ public class ArtifactService(
                  Type = a.Type,
                  SiteId = a.SiteId,
                  SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-                 PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+                 PrimaryImageUrl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"/api/public/artifacts/images/{m.Id}").FirstOrDefault()
              }).ToListAsync(ct);
     }
 
@@ -85,7 +85,7 @@ public class ArtifactService(
                 Type = a.Type,
                 SiteId = a.SiteId,
                 SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+                PrimaryImageUrl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"/api/public/artifacts/images/{m.Id}").FirstOrDefault()
             }).FirstOrDefaultAsync(ct);
     }
 
@@ -110,9 +110,9 @@ public class ArtifactService(
                 Type = a.Type,
                 SiteId = a.SiteId,
                 SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-                PrimaryImageurl = a.MediaFiles
+                PrimaryImageUrl = a.MediaFiles
                                     .Where(m => m.IsPrimary)
-                                    .Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+                                    .Select(m => $"/api/public/artifacts/images/{m.Id}").FirstOrDefault()
             }).ToListAsync(ct);
     }
 
@@ -131,7 +131,7 @@ public class ArtifactService(
                 Type = a.Type,
                 SiteId = a.SiteId,
                 SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+                PrimaryImageUrl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"/api/public/artifacts/images/{m.Id}").FirstOrDefault()
             })
             .ToListAsync(ct);
     }
@@ -158,9 +158,9 @@ public class ArtifactService(
                 Type = a.Type,
                 SiteId = a.SiteId,
                 SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-                PrimaryImageurl = a.MediaFiles
+                PrimaryImageUrl = a.MediaFiles
                                     .Where(m => m.IsPrimary)
-                                    .Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+                                    .Select(m => $"/api/public/artifacts/images/{m.Id}").FirstOrDefault()
             }).ToListAsync(ct);
 
     }
@@ -181,7 +181,7 @@ public class ArtifactService(
                 Type = a.Type,
                 SiteId = a.SiteId,
                 SiteName = (a.Site != null) ? a.Site.Name : String.Empty,
-                PrimaryImageurl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"api/public/artifacts/images/{m.Id}").FirstOrDefault()
+                PrimaryImageUrl = a.MediaFiles.Where(m => m.IsPrimary).Select(m => $"/api/public/artifacts/images/{m.Id}").FirstOrDefault()
             }).FirstOrDefaultAsync(ct);
     }
     #endregion
