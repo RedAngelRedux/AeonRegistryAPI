@@ -45,11 +45,9 @@ builder.Services.AddValidation();  // Enforces [Required] and other data annotat
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// By NOT wrapping in app.Environment.IsDevelopment, we enable Swagger in all environments
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Register custom global exception handling middleware FIRST
 app.UseMiddleware<BlockIdentityEndpoints>();
