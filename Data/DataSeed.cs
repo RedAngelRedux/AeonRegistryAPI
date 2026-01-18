@@ -38,7 +38,8 @@ public class DataSeed
 
     public static string GetSeedPath(params string[] paths)
     {
-        var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "SeedData");
+        //var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "SeedData");
+        var basePath = Path.Combine(AppContext.BaseDirectory, "Data", "SeedData");
         return Path.Combine(basePath, Path.Combine(paths));
     }
 

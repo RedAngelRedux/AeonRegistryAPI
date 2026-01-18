@@ -10,37 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\images\AND-001.png" />
-    <Content Remove="wwwroot\images\AND-002.png" />
-    <Content Remove="wwwroot\images\AND-003.png" />
-    <Content Remove="wwwroot\images\AND-004.png" />
-    <Content Remove="wwwroot\images\ANT-001.png" />
-    <Content Remove="wwwroot\images\ANT-002.png" />
-    <Content Remove="wwwroot\images\ANT-003.png" />
-    <Content Remove="wwwroot\images\ANT-004.png" />
-    <Content Remove="wwwroot\images\ATL-001.png" />
-    <Content Remove="wwwroot\images\ATL-002.png" />
-    <Content Remove="wwwroot\images\ATL-003.png" />
-    <Content Remove="wwwroot\images\ATL-004.png" />
-    <Content Remove="wwwroot\images\GOB-001.png" />
-    <Content Remove="wwwroot\images\GOB-002.png" />
-    <Content Remove="wwwroot\images\GOB-003.png" />
-    <Content Remove="wwwroot\images\GOB-004.png" />
-    <Content Remove="wwwroot\images\KAI-001.png" />
-    <Content Remove="wwwroot\images\KAI-002.png" />
-    <Content Remove="wwwroot\images\KAI-003.png" />
-    <Content Remove="wwwroot\images\KAI-004.png" />
-    <Content Remove="wwwroot\images\SAH-001.png" />
-    <Content Remove="wwwroot\images\SAH-002.png" />
-    <Content Remove="wwwroot\images\SAH-003.png" />
-    <Content Remove="wwwroot\images\SAH-004.png" />
-    <Content Remove="wwwroot\images\YON-001.png" />
-    <Content Remove="wwwroot\images\YON-002.png" />
-    <Content Remove="wwwroot\images\YON-003.png" />
-    <Content Remove="wwwroot\images\YON-004.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
@@ -58,34 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\images\AND-001.png" />
-    <None Include="wwwroot\images\AND-002.png" />
-    <None Include="wwwroot\images\AND-003.png" />
-    <None Include="wwwroot\images\AND-004.png" />
-    <None Include="wwwroot\images\ANT-001.png" />
-    <None Include="wwwroot\images\ANT-002.png" />
-    <None Include="wwwroot\images\ANT-003.png" />
-    <None Include="wwwroot\images\ANT-004.png" />
-    <None Include="wwwroot\images\ATL-001.png" />
-    <None Include="wwwroot\images\ATL-002.png" />
-    <None Include="wwwroot\images\ATL-003.png" />
-    <None Include="wwwroot\images\ATL-004.png" />
-    <None Include="wwwroot\images\GOB-001.png" />
-    <None Include="wwwroot\images\GOB-002.png" />
-    <None Include="wwwroot\images\GOB-003.png" />
-    <None Include="wwwroot\images\GOB-004.png" />
-    <None Include="wwwroot\images\KAI-001.png" />
-    <None Include="wwwroot\images\KAI-002.png" />
-    <None Include="wwwroot\images\KAI-003.png" />
-    <None Include="wwwroot\images\KAI-004.png" />
-    <None Include="wwwroot\images\SAH-001.png" />
-    <None Include="wwwroot\images\SAH-002.png" />
-    <None Include="wwwroot\images\SAH-003.png" />
-    <None Include="wwwroot\images\SAH-004.png" />
-    <None Include="wwwroot\images\YON-001.png" />
-    <None Include="wwwroot\images\YON-002.png" />
-    <None Include="wwwroot\images\YON-003.png" />
-    <None Include="wwwroot\images\YON-004.png" />
+    <None Update="Data/SeedData/Images/**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
