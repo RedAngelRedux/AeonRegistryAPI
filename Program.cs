@@ -1,5 +1,6 @@
 
 using AeonRegistryAPI.Endpoints.Artifacts;
+using AeonRegistryAPI.Endpoints.CatalogRecords;
 using AeonRegistryAPI.Endpoints.CustomIdentity;
 using AeonRegistryAPI.Endpoints.Home;
 using AeonRegistryAPI.Endpoints.Sites;
@@ -38,6 +39,7 @@ builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 // Custom Services
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IArtifactService, ArtifactService>();
+builder.Services.AddScoped<ICatalogRecordService, CatalogRecordService>();
 
 // Enable validation for minimal APIs (This is a .NET 10 feature)
 builder.Services.AddValidation();  // Enforces [Required] and other data annotations
@@ -71,6 +73,7 @@ app.MapHomeEndpoints();
 app.MapSiteEndpoints();
 app.MapArtifactMediaFileEndpoints();
 app.MapArtifactEndpoints();
+app.MapCatalogRecordEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {

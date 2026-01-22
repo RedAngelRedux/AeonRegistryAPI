@@ -137,8 +137,7 @@ public static class ArtifactEndpoints
         int artifactId,
         CancellationToken ct)
     {
-        var artifact = await artifactService.GetPrivateArtifactByIdAsync(artifactId, ct);
-        
+        var artifact = await artifactService.GetPrivateArtifactByIdAsync(artifactId, ct);        
         return (artifact is null) ? TypedResults.NotFound() : TypedResults.Ok(artifact);
     }
 
