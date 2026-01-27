@@ -22,6 +22,15 @@ public static class CatalogRecordEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        privateGroup.MapGet("/{Id:int}",GetCatalogRecordByIdHandler)
+            .WithName(nameof(GetCatalogRecordByIdHandler))
+            .WithSummary("Get Private Catalog Record by ID")
+            .WithDescription("Retrieves a private catalog record by its unique identifier.")
+            .Produces<CatalogRecordResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
         return route;
     }
 
@@ -32,6 +41,15 @@ public static class CatalogRecordEndpoints
     CancellationToken ct)
     {
         var catalogRecord = await catalogRecordService.GetCatalogRecordsByArtifactIdAsync(artifactId, ct);
+        return (catalogRecord is null) ? TypedResults.NotFound() : TypedResults.Ok(catalogRecord);
+    }
+
+    private static async Task<Results<Ok<CatalogRecordResponse>, NotFound>> GetCatalogRecordByIdHandler(
+    [FromServices] ICatalogRecordService catalogRecordService,
+    [FromRoute] int Id,
+    CancellationToken ct)
+    {
+        var catalogRecord = await catalogRecordService.GetCatalogRecordByIdAsync(Id, ct);
         return (catalogRecord is null) ? TypedResults.NotFound() : TypedResults.Ok(catalogRecord);
     }
 }
