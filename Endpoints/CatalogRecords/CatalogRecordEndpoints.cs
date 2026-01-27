@@ -13,7 +13,7 @@ public static class CatalogRecordEndpoints
             .WithTags("Catalog Records - Private")
             .RequireAuthorization();
 
-        privateGroup.MapGet("/{artifactId:int}", GetCatalogRecordsByArtifactHandler)
+        privateGroup.MapGet("/artifact/{artifactId:int}", GetCatalogRecordsByArtifactHandler)
             .WithName(nameof(GetCatalogRecordsByArtifactHandler))
             .WithSummary("Get Private Catalog Record by Artifact ID")
             .WithDescription("Retrieves a private catalog record by its associated artifact's unique identifier.")
