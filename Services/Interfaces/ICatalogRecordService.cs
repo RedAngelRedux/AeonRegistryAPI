@@ -17,5 +17,6 @@ public interface ICatalogRecordService
     #endregion
 
     #region Delete Operations
+    Task<bool> DeleteCatalogRecordAsync(int catalogRecordId, CancellationToken ct);
     #endregion
 }

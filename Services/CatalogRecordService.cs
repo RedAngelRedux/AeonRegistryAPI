@@ -35,6 +35,7 @@ public class CatalogRecordService(
             .Select(CatalogRecordSelectors.ToResponse)
             .FirstOrDefaultAsync(ct);
     }
+
     #endregion
 
     #region Read Operations
@@ -69,17 +70,26 @@ public class CatalogRecordService(
     #region Update Operations
     public async Task<bool> UpdateCatalogRecordAsync(int catalogRecordId, UpdateCatalogRecordRequest request, CancellationToken ct)
     {
-        // Validate the catalog record exists
+        // Retrieve the catalog record
         CatalogRecord? catalogRecord = await db.CatalogRecords
             .FirstOrDefaultAsync(cr => cr.Id == catalogRecordId, ct);
 
-        // If not found, return false
         if (catalogRecord == null)
             return false;
 
         // Update the catalog record
-        catalogRecord.VerifiedById = request.VerifiedById;
         catalogRecord.Status = request.Status;
+        catalogRecord.VerifiedById = (string.IsNullOrWhiteSpace(request.VerifiedById) ? null : request.VerifiedById);
+
+        // Validate VerifiedById if set
+        if (catalogRecord.VerifiedById != null)
+        {
+            var userExists = await db.Users
+                .AsNoTracking()
+                .AnyAsync(u => u.Id == catalogRecord.VerifiedById, ct);
+            if (!userExists)
+                return false;
+        }
 
         // Save changes
         await db.SaveChangesAsync(ct);
@@ -90,5 +100,16 @@ public class CatalogRecordService(
     #endregion
 
     #region Delete Operations
+    public async Task<bool> DeleteCatalogRecordAsync(int catalogRecordId, CancellationToken ct)
+    {
+        var catalogRecord = await db.CatalogRecords.FindAsync([catalogRecordId], ct);
+        if (catalogRecord == null)
+            return false;
+
+        db.CatalogRecords.Remove(catalogRecord);
+        await db.SaveChangesAsync(ct);
+        return true;
+    }
+
     #endregion
 }

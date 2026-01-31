@@ -61,6 +61,16 @@ public static class CatalogRecordEndpoints
         #endregion
 
         #region Delete Routes
+
+        privateGroup.MapDelete("/{Id:int}", DeleteCatalogRecordHandler)
+            .WithName(nameof(DeleteCatalogRecordHandler))
+            .WithSummary("Delete Private Catalog Record")
+            .WithDescription("Deletes an existing private catalog record identified by its unique identifier.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
         #endregion
 
         return route;
@@ -127,9 +137,8 @@ public static class CatalogRecordEndpoints
         [FromRoute] int Id,
         CancellationToken ct)
     {
-        throw new NotImplementedException();
-        //var success = await catalogRecordService.DeleteCatalogRecordAsync(Id, ct);
-        //return success ? TypedResults.NoContent() : TypedResults.NotFound();
+        var success = await catalogRecordService.DeleteCatalogRecordAsync(Id, ct);
+        return success ? TypedResults.NoContent() : TypedResults.NotFound();
     }
     #endregion
 }
