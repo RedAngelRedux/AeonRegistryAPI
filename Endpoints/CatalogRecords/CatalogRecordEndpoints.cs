@@ -14,6 +14,8 @@ public static class CatalogRecordEndpoints
             .WithTags("Catalog Records - Private")
             .RequireAuthorization();
 
+        #region Create Routes
+
         privateGroup.MapPost("/", CreateCatalogRecordHandler)
             .WithName(nameof(CreateCatalogRecordHandler))
             .WithSummary("Create Private Catalog Record")
@@ -22,6 +24,10 @@ public static class CatalogRecordEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
+
+        #endregion
+
+        #region Read Routes
 
         privateGroup.MapGet("/artifact/{artifactId:int}", GetCatalogRecordsByArtifactHandler)
             .WithName(nameof(GetCatalogRecordsByArtifactHandler))
@@ -40,6 +46,22 @@ public static class CatalogRecordEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
+
+        #endregion
+
+        #region Update Routes
+        privateGroup.MapPut("/{Id:int}", UpdateCatalogRecordHandler)
+            .WithName(nameof(UpdateCatalogRecordHandler))
+            .WithSummary("Update Private Catalog Record")
+            .WithDescription("Updates an existing private catalog record identified by its unique identifier.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        #endregion
+
+        #region Delete Routes
+        #endregion
 
         return route;
     }
@@ -84,6 +106,30 @@ public static class CatalogRecordEndpoints
     {
         var catalogRecord = await catalogRecordService.GetCatalogRecordByIdAsync(Id, ct);
         return (catalogRecord is null) ? TypedResults.NotFound() : TypedResults.Ok(catalogRecord);
+    }
+    #endregion
+
+    #region Update Operations
+    private static async Task<Results<NoContent, NotFound>> UpdateCatalogRecordHandler(
+        [FromServices] ICatalogRecordService catalogRecordService,
+        [FromRoute] int Id,
+        [FromBody] UpdateCatalogRecordRequest request,
+        CancellationToken ct)
+    {
+        var success = await catalogRecordService.UpdateCatalogRecordAsync(Id, request, ct);
+        return success ? TypedResults.NoContent() : TypedResults.NotFound();
+    }
+    #endregion
+
+    #region Delete Operations
+    private static async Task<Results<NoContent, NotFound>> DeleteCatalogRecordHandler(
+        [FromServices] ICatalogRecordService catalogRecordService,
+        [FromRoute] int Id,
+        CancellationToken ct)
+    {
+        throw new NotImplementedException();
+        //var success = await catalogRecordService.DeleteCatalogRecordAsync(Id, ct);
+        //return success ? TypedResults.NoContent() : TypedResults.NotFound();
     }
     #endregion
 }

@@ -13,6 +13,7 @@ public interface ICatalogRecordService
     #endregion
 
     #region Update Operations
+    Task<bool> UpdateCatalogRecordAsync(int catalogRecordId, UpdateCatalogRecordRequest request, CancellationToken ct);
     #endregion
 
     #region Delete Operations

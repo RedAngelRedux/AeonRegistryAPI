@@ -2,7 +2,8 @@
 
 namespace AeonRegistryAPI.Enums;
 
-[JsonConverter(typeof(JsonStringEnumConverter))] // This attribute ensures that the enum is serialized/deserialized as a string in JSON
+// This attribute ensures that the enum is serialized/deserialized as a string in JSON
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum CatalogStatus
 {
     Draft = 1,

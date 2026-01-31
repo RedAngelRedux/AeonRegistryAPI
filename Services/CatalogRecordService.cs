@@ -63,9 +63,30 @@ public class CatalogRecordService(
                 .Select(CatalogRecordSelectors.ToResponse)
                 .ToListAsync(ct);
     }
+
     #endregion
 
     #region Update Operations
+    public async Task<bool> UpdateCatalogRecordAsync(int catalogRecordId, UpdateCatalogRecordRequest request, CancellationToken ct)
+    {
+        // Validate the catalog record exists
+        CatalogRecord? catalogRecord = await db.CatalogRecords
+            .FirstOrDefaultAsync(cr => cr.Id == catalogRecordId, ct);
+
+        // If not found, return false
+        if (catalogRecord == null)
+            return false;
+
+        // Update the catalog record
+        catalogRecord.VerifiedById = request.VerifiedById;
+        catalogRecord.Status = request.Status;
+
+        // Save changes
+        await db.SaveChangesAsync(ct);
+
+        // return success status
+        return true;
+    }
     #endregion
 
     #region Delete Operations
